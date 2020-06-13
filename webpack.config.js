@@ -10,13 +10,16 @@ const VENDOR_LIBS = [
 module.exports = {
 
     devServer: {
+        host: '127.0.0.1',
         contentBase: path.join(__dirname, 'dist'),
         compress: true,
         open: true,
-        port: 3000
+        port: 3000,
+        publicPath: '/',
+        historyApiFallback: true
     },
 
-    devtool: 'eval-source-map',
+    devtool: 'inline-source-map',
 
     entry: {
         main: './client/index.tsx',
@@ -55,11 +58,28 @@ module.exports = {
                 test: /\.(css|scss)$/,
                 use: [
                     // Create 'style' nodes from JS strings
-                    'style-loader',
+                    {
+                        loader: 'style-loader'
+                    },
                     //Translates CSS to CommonJS
-                    'css-loader',
+                    {
+                        loader: 'css-loader'
+                    },
                     // Compiles Sass to CSS
-                    'sass-loader'
+                    {
+                        loader: 'sass-loader'
+                    },
+                    {
+                        loader: 'postcss-loader',
+                        options: {
+                            plugins: function() {
+                                return [
+                                    require('precss'),
+                                    require('autoprefixer')
+                                ]
+                            }
+                        }
+                    }
                 ]
             },
 

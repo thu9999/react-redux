@@ -1,19 +1,38 @@
 import express from 'express';
 import path from 'path';
-
-import webpack from 'webpack';
-import webpackMiddleware from 'webpack-dev-middleware';
-import webpackConfig from '../webpack.config.js';
+import bodyParser from 'body-parser';
 
 const app = express();
 
-//app.use(express.static('dist'));
+app.use(express.static('dist'));
 
-app.use(webpackMiddleware(webpack(webpackConfig)));
+// Parse URL-encoded bodies
+app.use(bodyParser.urlencoded({
+    extended: true
+}));
+
+// Parse JSON bodies
+app.use(bodyParser.json());
+
+// Accept request
+app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE')
+    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+    next();
+});
 
 app.get('/*', (req, res) => {
-    res.sendFile(path.resolve(__dirname, '/client/index.html'));
+    res.sendFile(path.join(__dirname, '/dist/index.html'))
 });
+
+/**
+ * Sign up
+ */
+app.post('/auth/signup', (req, res) => {
+    const params = req.body;
+    console.log(params)
+})
 
 const PORT = process.env.PORT || 8080;
 
