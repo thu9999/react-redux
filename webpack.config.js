@@ -16,10 +16,10 @@ module.exports = {
         port: 3000
     },
 
-    devtool: 'inline-source-map',
+    devtool: 'eval-source-map',
 
     entry: {
-        main: './src/index.tsx',
+        main: './client/index.tsx',
         vendor: VENDOR_LIBS
     },
 
@@ -86,7 +86,7 @@ module.exports = {
 
     plugins: [
         new HtmlWebpackPlugin({
-            template: './index.html'
+            template: './client/index.html'
         })
     ]
 };
