@@ -1,5 +1,5 @@
 import http from '../http-common';
-import { SignupFormValue } from '../interfaces/signup-form-value';
+import SignupFormValue from '../interfaces/signup-form-value';
 
 /**
  * Signup 
@@ -7,7 +7,7 @@ import { SignupFormValue } from '../interfaces/signup-form-value';
  */
 
 const signup = (value: SignupFormValue) => {
-    return http.post('/auth/signup', value);
+    return http.post('/api/users/signup', value);
 }
 
 export default {

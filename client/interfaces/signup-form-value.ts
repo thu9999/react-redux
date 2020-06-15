@@ -1,6 +1,8 @@
-export interface SignupFormValue {
+interface SignupFormValue {
     username: string,
     email: string,
     password: string, 
     confirmPassword: string
 }
+
+export default SignupFormValue;

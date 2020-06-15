@@ -1,7 +1,7 @@
 import * as React from 'react';
 import './App.scss';
 import { BrowserRouter as Router, Route, Switch, Redirect, } from 'react-router-dom';
-import { SignupFormValue } from '../interfaces/signup-form-value';
+import SignupFormValue from '../interfaces/signup-form-value';
 import AuthService from './../services/auth';
 
 export interface PRoute {
@@ -31,7 +31,7 @@ export const fakeAuth = {
     }
 }
 
-export function PrivateRoute({ children, ...rest }: PRoute) {
+export const PrivateRoute = ({ children, ...rest }: PRoute) => {
     return (
         <Route
             { ...rest }
@@ -49,13 +49,27 @@ export function PrivateRoute({ children, ...rest }: PRoute) {
     )
 }
 
+export interface SignupErrorInterface {
+    username?: string
+    email?: string 
+    password?: string 
+    confirmPassword?: string
+}
+
 const App = () => {
 
+    const [ signupError, setSignupError ] = React.useState<SignupErrorInterface>({})
+
     const onSignup = (value: SignupFormValue) => {
-        AuthService.signup(value).then(res => {
-            console.log(res)
-        }).catch(err => {
-            console.log(err)
+        // Clear signup error
+        setSignupError({});
+
+        AuthService.signup(value)
+        .then(res => {
+            console.log(res.data)
+        })
+        .catch(err => {
+            setSignupError(err.response.data.errors);
         })
     }
 
@@ -65,17 +79,14 @@ const App = () => {
 
     return (    
         <Router>
-
             <React.Suspense fallback={<div>Loading...</div>}>
-
                 <Switch>
-                        
                     <Route exact path='/login'>
                         <Login handleLogin={onLogin} />
                     </Route>
 
                     <Route exact path='/signup'>
-                        <Signup handleSignup={onSignup} />
+                        <Signup handleSignup={onSignup} errors={signupError} />
                     </Route>
                     
                     <PrivateRoute path="/home">
@@ -84,9 +95,7 @@ const App = () => {
 
                     <Redirect from="/" to="/login"  />
                 </Switch>
-
             </React.Suspense>
-
         </Router>
     );
 }

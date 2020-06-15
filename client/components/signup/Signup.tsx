@@ -1,14 +1,17 @@
 import * as React from 'react';
 import { Link } from 'react-router-dom';
-import { SignupFormValue } from '../../interfaces/signup-form-value';
+import SignupFormValue  from '../../interfaces/signup-form-value';
+import { SignupErrorInterface } from '../App';
+import TextField from '../text-field/TextField';
 
 interface SignupProps {
+    errors: SignupErrorInterface
     handleSignup(value: SignupFormValue): void
 }
 
 const Signup = (props: SignupProps) => {
 
-    const { handleSignup } = props;
+    const { handleSignup, errors } = props;
 
     const [username, setUsername] = React.useState('');
 
@@ -24,76 +27,57 @@ const Signup = (props: SignupProps) => {
             <div className='col-md-4 col-md-offset-4'>
                 <form className='login-form' onSubmit={e => {
                     e.preventDefault();
-                handleSignup({username, email, password, confirmPassword});
+                    handleSignup({username, email, password, confirmPassword});
                 }}>
                     
                     {/**Username */}
-                    <div className='form-group'>
-                        <label htmlFor='inputUsername' className="font-weight-bold">Username</label>
-                        <input 
-                            type='text' 
-                            className='form-control' 
-                            id='inputUsername' 
-                            aria-describedby='usernamehelp'
-                            placeholder='Enter username'
-                            value={username}
-                            onChange={e => {
-                                const value = e.target.value;
-                                setUsername(value);
-                            }}
-                        />
-                    </div>
+                    <TextField
+                        id='inputUsername'
+                        error={errors?.username}
+                        label='Username' 
+                        type='text'
+                        value={username}
+                        handleChange={(value) => {
+                            setUsername(value)
+                        }}
+                    />
 
                     {/**Email */}
-                    <div className='form-group'>
-                        <label htmlFor='inputEmail' className="font-weight-bold">Email</label>
-                        <input 
-                            type='text' 
-                            className='form-control' 
-                            id='inputEmail' 
-                            aria-describedby='emailhelp'
-                            placeholder='Enter email'
-                            value={email}
-                            onChange={e => {
-                                const value = e.target.value;
-                                setemail(value);
-                            }}
-                        />
-                    </div>
+                    <TextField
+                        id='inputEmail'
+                        error={errors?.email}
+                        label='Email' 
+                        type='text'
+                        value={email}
+                        handleChange={(value) => {
+                            setemail(value)
+                        }}
+                    />
 
                     {/**Password */}
-                    <div className='form-group'>
-                        <label htmlFor='inputPassword' className="font-weight-bold">Password</label>
-                        <input 
-                            type='text' 
-                            className='form-control' 
-                            id='inputPassword' 
-                            aria-describedby='passwordhelp'
-                            placeholder='Enter password'
-                            value={password}
-                            onChange={e => {
-                                const value = e.target.value;
-                                setPassword(value);
-                            }}
-                        />
-                    </div>
+                    <TextField
+                        id='inputPassword'
+                        error={errors?.password}
+                        label='Password' 
+                        type='password'
+                        value={password}
+                        handleChange={(value) => {
+                            setPassword(value)
+                        }}
+                    />
 
                     {/**Confirm password */}
-                    <div className='form-group'>
-                        <label htmlFor='inputConfirmPassword' className="font-weight-bold">Confirm password</label>
-                        <input 
-                            type='text' 
-                            className='form-control' 
-                            id='inputConfirmPassword' 
-                            aria-describedby='confirmPasswordHelp'
-                            placeholder='Enter confirm password'
-                            value={confirmPassword}
-                            onChange={e => {
-                                const value = e.target.value;
-                                setConfirmPassword(value);
-                            }}
-                        />
-                    </div>
+                    <TextField
+                        id='inputConfirmPassword'
+                        error={errors?.confirmPassword}
+                        label='Confirm password' 
+                        type='password'
+                        value={confirmPassword}
+                        handleChange={(value) => {
+                            setConfirmPassword(value)
+                        }}
+                    />
+
 
                     <div className='form-group'>
                         Already had an account? <Link to="/login">Login</Link>

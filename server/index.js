@@ -2,6 +2,8 @@ import express from 'express';
 import path from 'path';
 import bodyParser from 'body-parser';
 
+import router from './routes/users';
+
 const app = express();
 
 app.use(express.static('dist'));
@@ -22,22 +24,15 @@ app.use((req, res, next) => {
     next();
 });
 
+app.use('/api/users', router);
+
 app.get('/*', (req, res) => {
     res.sendFile(path.join(__dirname, '/dist/index.html'))
 });
 
-/**
- * Sign up
- */
-app.post('/auth/signup', (req, res) => {
-    const params = req.body;
-    console.log(params)
-})
-
 const PORT = process.env.PORT || 8080;
 
 app.listen(PORT, (err) => {
-
     if(err) throw err;
 
     console.log(`Server is running on port ${PORT}`);
