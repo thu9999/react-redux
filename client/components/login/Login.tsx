@@ -2,6 +2,7 @@ import * as React from 'react';
 import { Link } from 'react-router-dom';
 
 interface LoginProps {
+    error: string
     handleLogin(username: string, password: string): void
 }
 
@@ -11,7 +12,7 @@ const Login = (props: LoginProps) => {
 
     const [ password, setPassword ] = React.useState('');
 
-    const { handleLogin } = props;
+    const { handleLogin, error } = props;
 
     return (
         <div className='row d-flex justify-content-center align-items-center' onSubmit={e => {
@@ -56,6 +57,8 @@ const Login = (props: LoginProps) => {
                     </div>
 
                     <button type='submit' className='btn btn-primary w-100'>Submit</button>
+
+                    <div className='form-group text-danger mt-2'>{error}</div>
                 </form>
             </div>
         </div>

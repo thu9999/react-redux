@@ -1,11 +1,11 @@
 import * as React from 'react';
 import { Link } from 'react-router-dom';
 import SignupFormValue  from '../../interfaces/signup-form-value';
-import { SignupErrorInterface } from '../App';
 import TextField from '../text-field/TextField';
+import SignupFormErrors from '../../interfaces/signup-form-error';
 
 interface SignupProps {
-    errors: SignupErrorInterface
+    errors: SignupFormErrors
     handleSignup(value: SignupFormValue): void
 }
 
@@ -35,6 +35,7 @@ const Signup = (props: SignupProps) => {
                         id='inputUsername'
                         error={errors?.username}
                         label='Username' 
+                        placeholder='Enter username'
                         type='text'
                         value={username}
                         handleChange={(value) => {
@@ -47,6 +48,7 @@ const Signup = (props: SignupProps) => {
                         id='inputEmail'
                         error={errors?.email}
                         label='Email' 
+                        placeholder='Enter email'
                         type='text'
                         value={email}
                         handleChange={(value) => {
@@ -59,6 +61,7 @@ const Signup = (props: SignupProps) => {
                         id='inputPassword'
                         error={errors?.password}
                         label='Password' 
+                        placeholder='Enter password'
                         type='password'
                         value={password}
                         handleChange={(value) => {
@@ -71,6 +74,7 @@ const Signup = (props: SignupProps) => {
                         id='inputConfirmPassword'
                         error={errors?.confirmPassword}
                         label='Confirm password' 
+                        placeholder='Enter confirm password'
                         type='password'
                         value={confirmPassword}
                         handleChange={(value) => {

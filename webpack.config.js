@@ -40,6 +40,11 @@ module.exports = {
                     }
                 ],
                 exclude: /node_modules/,
+                include: [
+                    path.join(__dirname, '/client'),
+                    path.join(__dirname, '/server'),
+                    path.join(__dirname, '/server/routes'),
+                ]
             },
 
             // Typescript loader
@@ -51,6 +56,9 @@ module.exports = {
                     }
                 ],
                 exclude: /node_modules/,
+                include: [
+                    path.join(__dirname, '/client')
+                ]
             },
 
             // Style and css loader

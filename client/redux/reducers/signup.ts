@@ -1,4 +1,17 @@
-import { SignupState, initialSignupState, SignupAction, SIGNUP } from "../types/signup";
+export const SIGNUP = 'SIGNUP';
+
+export interface SignupState {
+    success: boolean
+}
+
+export interface SignupAction {
+    type: typeof SIGNUP,
+    payload: boolean
+}
+
+export const initialSignupState: SignupState = {
+    success: false
+}
 
 export function signupReducer (
     state: SignupState = initialSignupState, 
