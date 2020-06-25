@@ -4,6 +4,16 @@ import * as _ from 'lodash';
 import User from '../db/users.model';
 import bscrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
+import passport from 'passport';
+import passportFacebook from 'passport-facebook';
+
+const FacebookStrategy = passportFacebook.Strategy;
+
+passport.use(new FacebookStrategy({
+    clientID: process.env.FACEBOOK_APP_ID,
+    clientSecret: process.env.FACEBOOK_APP_SECRET,
+    callbackURL: "http://www.example.com/auth/facebook/callback"
+}))
 
 const users = express.Router();
 
@@ -110,8 +120,9 @@ users.post('/signup', async (req, res) => {
 });
 
 /**
- * Login
+ * Login using username and password
  */
+
 users.post('/login', async (req, res) => {
     const { username, password } = req.body;
 
@@ -136,7 +147,9 @@ users.post('/login', async (req, res) => {
             // Password is correct
             // Create and assign a token
             const token = jwt.sign(
-                {_id: checkUsername._id},
+                {
+                    _id: checkUsername._id
+                },
                 process.env.TOKEN_SECRET
             );
             res.header('token', token);
@@ -154,6 +167,12 @@ users.post('/login', async (req, res) => {
     })
 
 });
+
+/**
+ * Login using facebook oauth
+ */
+users.post('/facebook', passport.authenticate('facebook'));
+
 
 /**
  * Refresh token
