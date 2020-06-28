@@ -27,7 +27,7 @@ http.interceptors.response.use(
     err => {
         const originalRequest = err.config;
 
-        if(err.response.status === 401 && !originalRequest._retry) {
+        if(err.response?.status === 401 && !originalRequest._retry) {
             if(isRefreshing) {
                 return new Promise((resolve, reject) => {
                     failedQueue.push({resolve, reject});
@@ -59,6 +59,9 @@ http.interceptors.response.use(
                 })
             });
             return Promise.reject(err)
+        } else {
+            // Redirect to login page
+            window.location.href = 'http://localhost:8080/api/users/google';
         }
     }
 )

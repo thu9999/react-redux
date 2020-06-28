@@ -5,17 +5,10 @@ import User from '../db/users.model';
 import bscrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import passport from 'passport';
-import passportFacebook from 'passport-facebook';
-
-const FacebookStrategy = passportFacebook.Strategy;
-
-passport.use(new FacebookStrategy({
-    clientID: process.env.FACEBOOK_APP_ID,
-    clientSecret: process.env.FACEBOOK_APP_SECRET,
-    callbackURL: "http://www.example.com/auth/facebook/callback"
-}))
+import googleStrategyConfig from './../config/auth-google';
 
 const users = express.Router();
+passport.use(googleStrategyConfig);
 
 /**
  * Check exist
@@ -169,16 +162,43 @@ users.post('/login', async (req, res) => {
 });
 
 /**
- * Login using facebook oauth
+ * Login using google
  */
-users.post('/facebook', passport.authenticate('facebook'));
+users.get('/google', passport.authenticate('google', {
+    scope: ['profile', 'email']
+}));
 
+users.get('/google/redirect', passport.authenticate('google', {
+    failureRedirect: '/login'
+}), (req, res) => {
+    const user = req.user;
+    const token = jwt.sign(
+        {
+            _id: user._id
+        },
+        process.env.TOKEN_SECRET
+    );
+    const callbackURL = 'http://localhost:3000/home';
+    const params = new URLSearchParams();
+    params.append('token', token);
+    res.redirect(`${callbackURL}?${params}`);
+});
 
 /**
  * Refresh token
  */
 users.post('/refresh', async (req, res) => {
     res.status(200).send('Refresh successfully')
+})
+
+/**
+ * Logout
+ */
+users.get('/logout', (req, res) => {
+    res.status(200).json({
+        success: true,
+        err: null
+    })
 })
 
 export default users;

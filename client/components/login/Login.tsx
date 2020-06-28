@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 interface LoginProps {
     error: string
     handleLogin(username: string, password: string): void
+    handleGoogleLogin(): void
 }
 
 const Login = (props: LoginProps) => {
@@ -12,7 +13,7 @@ const Login = (props: LoginProps) => {
 
     const [ password, setPassword ] = React.useState('');
 
-    const { handleLogin, error } = props;
+    const { handleLogin, handleGoogleLogin, error } = props;
 
     return (
         <div className='row d-flex justify-content-center align-items-center' onSubmit={e => {
@@ -56,9 +57,24 @@ const Login = (props: LoginProps) => {
                         Haven't had an account yet? <Link to="/signup">Signup</Link>
                     </div>
 
-                    <button type='submit' className='btn btn-primary w-100'>Submit</button>
+                    <button type='submit' className='btn btn-info w-100'>Submit</button>
+
+                    {/**OpenID login */}
+                    <div className='row mt-4'>
+
+                        {/**Login by google account */}
+                        <div className='col-6'>
+                            <a className='btn btn-danger w-100' href="http://localhost:8080/api/users/google">Google +</a>
+                        </div>
+                        
+                        {/**Login by facebook account */}
+                        <div className='col-6'>
+                            <button className='w-100 btn bg-primary text-white'>Facebook</button>
+                        </div>
+                    </div>
 
                     <div className='form-group text-danger mt-2'>{error}</div>
+
                 </form>
             </div>
         </div>

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import './App.scss';
-import { Route, Switch, Redirect, useHistory } from 'react-router-dom';
+import { Route, Switch, Redirect, useHistory, useLocation } from 'react-router-dom';
 import SignupFormValue from '../interfaces/signup-form-value';
 import AuthService from './../services/auth';
 import signupFormValidation from './sisgnup-form-validation';
@@ -36,7 +36,8 @@ export const fakeAuth = {
             err => {
                 return Promise.reject(err);
             }
-        )
+        );
+
         cb();
     },
 
@@ -66,6 +67,8 @@ export const PrivateRoute = ({ children, ...rest }: PRoute) => {
         />
     )
 }
+
+export const useQuery = () => new URLSearchParams(useLocation().search);
 
 const App = () => {
 
@@ -103,8 +106,39 @@ const App = () => {
                 }
             })
         }
-    }
+    };
 
+    const query = useQuery();
+
+    const token = query.get('token');
+
+    React.useEffect(() => {
+        /**
+         * Check if redirect login from server contains token
+         */
+        if(token) {
+            console.log({token})
+            fakeAuth.authenticate(token, () => {
+                history.push('/home');
+            });
+        } else {
+            // Check token from localStorage
+            const tk = localStorage.getItem('token');
+            if(tk) {
+                fakeAuth.authenticate(tk, () => {
+                    history.push('/home');
+                })
+            }
+        }
+    }, [token])
+
+
+
+    /**
+     * Login using username and password
+     * @param username 
+     * @param password 
+     */
     const onLogin = (username: string, password: string) => {
         AuthService.login({username, password}).then(res => {
             if(res.data.success) {
@@ -127,18 +161,45 @@ const App = () => {
         })
     };
 
+    /**
+     * Login using google authentication
+     */
+    const onGoogleLogin = () => {
+        AuthService.googleLogin()
+            .then(res => {
+                console.log(res);
+            })
+            .catch(err => {
+                console.log(err);
+            })
+    }
+
     {/**Logout */}
     const onLogout = () => {
-        fakeAuth.signout(() => {
-            history.push('/login');
-        })
+        AuthService.logout()
+            .then(res => {
+                if(res.data.success) {
+                    fakeAuth.signout(() => {
+                        history.push('/login');
+                    })  
+                } else {
+                    console.log('Something went wrong');
+                }
+            })
+            .catch(err => {
+                console.log(err)
+            })
     }
 
     return (    
         <React.Suspense fallback={<div>Loading...</div>}>
             <Switch>
                 <Route exact path='/login'>
-                    <Login handleLogin={onLogin} error={loginError} />
+                    <Login 
+                        handleLogin={onLogin}
+                        handleGoogleLogin={onGoogleLogin} 
+                        error={loginError} 
+                    />
                 </Route>
 
                 <Route exact path='/signup'>

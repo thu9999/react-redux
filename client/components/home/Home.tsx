@@ -5,7 +5,6 @@ import { FlashMessageState } from '../../redux/reducers/flash-message';
 import Todo from '../todo/Todo';
 import TodoService from './../../services/todo';
 import { useHistory } from 'react-router-dom';
-
 export interface TodoInterface {
     id: string 
     name: string 
@@ -25,8 +24,6 @@ const Home = (props: HomeProps) => {
     const [ todo, setTodo ] = useState<string>('');
 
     const [ todos, setTodos ] = useState<TodoInterface[]>([]);
-
-    const history = useHistory();
 
     const getTodoList = () => {
         TodoService.getTodo().then(res => {
