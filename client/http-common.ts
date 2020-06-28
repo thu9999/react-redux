@@ -1,11 +1,10 @@
-import Axios, { AxiosRequestConfig } from 'axios';
+import Axios from 'axios';
+import CONFIG from './config';
 
 const token = localStorage.getItem('token');
 
-const URL = 'http://localhost:8080/';
-
 const http = Axios.create({
-    baseURL: URL,
+    baseURL: CONFIG.SERVER,
     headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${token}`
@@ -44,7 +43,7 @@ http.interceptors.response.use(
 
             const refreshToken = localStorage.getItem('refreshToken');
             return new Promise((resolve, reject) => {
-                Axios.post<RefreshTokenData>(`${URL}api/users/refresh`, { refreshToken})
+                Axios.post<RefreshTokenData>(`${CONFIG.SERVER}api/users/refresh`, { refreshToken})
                 .then(res => {
                     const { token, refreshToken } = res.data;
                     localStorage.setItem('token', token);
@@ -61,7 +60,7 @@ http.interceptors.response.use(
             return Promise.reject(err)
         } else {
             // Redirect to login page
-            window.location.href = 'http://localhost:8080/api/users/google';
+            window.location.href = CONFIG.GOOGLE_AUTH;
         }
     }
 )

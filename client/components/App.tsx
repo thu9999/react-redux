@@ -161,19 +161,6 @@ const App = () => {
         })
     };
 
-    /**
-     * Login using google authentication
-     */
-    const onGoogleLogin = () => {
-        AuthService.googleLogin()
-            .then(res => {
-                console.log(res);
-            })
-            .catch(err => {
-                console.log(err);
-            })
-    }
-
     {/**Logout */}
     const onLogout = () => {
         AuthService.logout()
@@ -197,7 +184,6 @@ const App = () => {
                 <Route exact path='/login'>
                     <Login 
                         handleLogin={onLogin}
-                        handleGoogleLogin={onGoogleLogin} 
                         error={loginError} 
                     />
                 </Route>

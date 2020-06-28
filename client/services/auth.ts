@@ -3,7 +3,6 @@ import SignupFormValue from '../interfaces/signup-form-value';
 import LoginFormValue from '../interfaces/login-form-value';
 
 const userAPI = '/api/users/';
-const callbackURL = 'http://localhost:3000/'
 
 /**
  * Signup 
@@ -22,15 +21,6 @@ const login = (value: LoginFormValue) => {
 }
 
 /**
- * Login using google account
- */
-const googleLogin = () => {
-    const params = new URLSearchParams();
-        params.append('callback', callbackURL);
-    return http.get(`${userAPI}google?${params}`);
-}
-
-/**
  * Logout
  */
 const logout = () => {
@@ -40,7 +30,6 @@ const logout = () => {
 export default {
     signup,
     login,
-    googleLogin,
     logout
 }
 

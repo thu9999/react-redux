@@ -1,10 +1,10 @@
 import * as React from 'react';
 import { Link } from 'react-router-dom';
+import CONFIG from '../../config';
 
 interface LoginProps {
     error: string
     handleLogin(username: string, password: string): void
-    handleGoogleLogin(): void
 }
 
 const Login = (props: LoginProps) => {
@@ -13,7 +13,7 @@ const Login = (props: LoginProps) => {
 
     const [ password, setPassword ] = React.useState('');
 
-    const { handleLogin, handleGoogleLogin, error } = props;
+    const { handleLogin, error } = props;
 
     return (
         <div className='row d-flex justify-content-center align-items-center' onSubmit={e => {
@@ -64,7 +64,7 @@ const Login = (props: LoginProps) => {
 
                         {/**Login by google account */}
                         <div className='col-6'>
-                            <a className='btn btn-danger w-100' href="http://localhost:8080/api/users/google">Google +</a>
+                            <a className='btn btn-danger w-100' href={CONFIG.GOOGLE_AUTH}>Google +</a>
                         </div>
                         
                         {/**Login by facebook account */}
